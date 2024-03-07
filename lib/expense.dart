@@ -45,7 +45,7 @@ class _ExpensesState extends State<Expenses> {
     setState(() {
       _userExpense.remove(expense);
     });
-    print("is this run");
+    print("is this running");
     ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
