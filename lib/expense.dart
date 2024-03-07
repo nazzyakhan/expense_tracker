@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:expense_tracker/models/expense.dart';
 import 'package:expense_tracker/widgets/expenses_list/expenses_list.dart';
 import 'package:expense_tracker/widgets/new_expense.dart';
+import 'package:expense_tracker/widgets/chart/chart.dart';
+import 'package:expense_tracker/widgets/chart/chart_bar.dart';
 
 class Expenses extends StatefulWidget {
   const Expenses({super.key});
+
   @override
   State<Expenses> createState() {
     return _ExpensesState();
@@ -12,20 +15,21 @@ class Expenses extends StatefulWidget {
 }
 
 class _ExpensesState extends State<Expenses> {
-  final List<Expense> _userExpense = [
+  final List<Expense> _registeredExpenses = [
     Expense(
-      name: 'Flutter Course',
+      title: 'Flutter Course',
       amount: 19.99,
       date: DateTime.now(),
       category: Category.work,
     ),
     Expense(
-      name: 'Cinema',
+      title: 'Cinema',
       amount: 15.69,
       date: DateTime.now(),
-      category: Category.travel,
-    )
+      category: Category.leisure,
+    ),
   ];
+
   void _openAddExpenseOverlay() {
     showModalBottomSheet(
       isScrollControlled: true,
@@ -36,72 +40,61 @@ class _ExpensesState extends State<Expenses> {
 
   void _addExpense(Expense expense) {
     setState(() {
-      _userExpense.add(expense);
+      _registeredExpenses.add(expense);
     });
   }
 
   void _removeExpense(Expense expense) {
-    final expenseIndex = _userExpense.indexOf(expense);
+    final expenseIndex = _registeredExpenses.indexOf(expense);
     setState(() {
-      _userExpense.remove(expense);
+      _registeredExpenses.remove(expense);
     });
-    print("is this running");
     ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        backgroundColor: Theme.of(context).colorScheme.error,
         duration: const Duration(seconds: 3),
-        content: const Text('Expense deleted'),
+        content: const Text('Expense deleted.'),
         action: SnackBarAction(
-            textColor: Theme.of(context).colorScheme.error,
-            label: 'Undo',
-            onPressed: () {
-              setState(() {
-                _userExpense.insert(expenseIndex, expense);
-              });
-            }),
+          label: 'Undo',
+          onPressed: () {
+            setState(() {
+              _registeredExpenses.insert(expenseIndex, expense);
+            });
+          },
+        ),
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    Widget? mainContent;
+    Widget mainContent = const Center(
+      child: Text('No expenses found. Start adding some!'),
+    );
 
-    if (_userExpense.isNotEmpty) {
+    if (_registeredExpenses.isNotEmpty) {
       mainContent = ExpensesList(
-        expenses: _userExpense,
+        expenses: _registeredExpenses,
         onRemoveExpense: _removeExpense,
-      );
-    } else {
-      mainContent = const Center(
-        child: Text('No Expense found. Start adding some!'),
       );
     }
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Flutter Expense Tracker',
-          style: TextStyle(color: Colors.white),
-        ),
+        title: const Text('Flutter ExpenseTracker'),
         actions: [
           IconButton(
             onPressed: _openAddExpenseOverlay,
-            icon: const Icon(
-              Icons.add,
-              size: 30,
-              color: Colors.white,
-            ),
-          )
+            icon: const Icon(Icons.add),
+          ),
         ],
-        centerTitle: true,
-        backgroundColor: Color.fromARGB(255, 127, 85, 57),
       ),
       body: Column(
         children: [
-          const Text('the chart'),
-          Expanded(child: mainContent),
+          Chart(expenses: _registeredExpenses),
+          Expanded(
+            child: mainContent,
+          ),
         ],
       ),
     );
