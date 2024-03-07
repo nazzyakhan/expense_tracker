@@ -14,15 +14,17 @@ class Expenses extends StatefulWidget {
 class _ExpensesState extends State<Expenses> {
   final List<Expense> _userExpense = [
     Expense(
-        name: 'Flutter Course',
-        amount: 19.99,
-        date: DateTime.now(),
-        category: Category.work),
+      name: 'Flutter Course',
+      amount: 19.99,
+      date: DateTime.now(),
+      category: Category.work,
+    ),
     Expense(
-        name: 'Cinema',
-        amount: 15.69,
-        date: DateTime.now(),
-        category: Category.travel)
+      name: 'Cinema',
+      amount: 15.69,
+      date: DateTime.now(),
+      category: Category.travel,
+    )
   ];
   void _openAddExpenseOverlay() {
     showModalBottomSheet(
@@ -43,8 +45,10 @@ class _ExpensesState extends State<Expenses> {
     setState(() {
       _userExpense.remove(expense);
     });
+    print("is this run");
     ScaffoldMessenger.of(context).clearSnackBars();
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
         backgroundColor: Theme.of(context).colorScheme.error,
         duration: const Duration(seconds: 3),
         content: const Text('Expense deleted'),
@@ -55,19 +59,26 @@ class _ExpensesState extends State<Expenses> {
               setState(() {
                 _userExpense.insert(expenseIndex, expense);
               });
-            })));
+            }),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    Widget mainContent = const Center(
-      child: Text('No Expense found. Start adding some!'),
-    );
+    Widget? mainContent;
 
     if (_userExpense.isNotEmpty) {
-      mainContent =
-          ExpensesList(expenses: _userExpense, onRemoveExpense: _removeExpense);
+      mainContent = ExpensesList(
+        expenses: _userExpense,
+        onRemoveExpense: _removeExpense,
+      );
+    } else {
+      mainContent = const Center(
+        child: Text('No Expense found. Start adding some!'),
+      );
     }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -76,8 +87,13 @@ class _ExpensesState extends State<Expenses> {
         ),
         actions: [
           IconButton(
-              onPressed: _openAddExpenseOverlay,
-              icon: const Icon(Icons.add, size: 30, color: Colors.white))
+            onPressed: _openAddExpenseOverlay,
+            icon: const Icon(
+              Icons.add,
+              size: 30,
+              color: Colors.white,
+            ),
+          )
         ],
         centerTitle: true,
         backgroundColor: Color.fromARGB(255, 127, 85, 57),

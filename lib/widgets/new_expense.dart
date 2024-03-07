@@ -45,10 +45,11 @@ class _NewExpenseState extends State<NewExpense> {
               'Please make sure a valid title, amount, date and category was entered'),
           actions: [
             TextButton(
-                onPressed: () {
-                  Navigator.pop(ctx);
-                },
-                child: const Text('Okay'))
+              onPressed: () {
+                Navigator.pop(ctx);
+              },
+              child: const Text('Okay'),
+            )
           ],
         ),
       );
@@ -56,10 +57,11 @@ class _NewExpenseState extends State<NewExpense> {
     }
     widget.onAddExpense(
       Expense(
-          name: _titleController.text,
-          amount: enteredAmount,
-          date: _selectedDate!,
-          category: _chooseCategory),
+        name: _titleController.text,
+        amount: enteredAmount,
+        date: _selectedDate!,
+        category: _chooseCategory,
+      ),
     );
     Navigator.pop(context);
   }
