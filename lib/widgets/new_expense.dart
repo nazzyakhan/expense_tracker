@@ -38,28 +38,33 @@ class _NewExpenseState extends State<NewExpense> {
         amountIsInvalid ||
         _selectedDate == null) {
       showDialog(
-          context: context,
-          builder: (ctx) => AlertDialog(
-                  title: const Text('Invalid Input'),
-                  content: const Text(
-                      'Please make sure a valid title, amount, date and category was entered'),
-                  actions: [
-                    TextButton(
-                        onPressed: () {
-                          Navigator.pop(ctx);
-                        },
-                        child: const Text('Okay'))
-                  ]));
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: const Text('Invalid Input'),
+          content: const Text(
+              'Please make sure a valid title, amount, date and category was entered'),
+          actions: [
+            TextButton(
+                onPressed: () {
+                  Navigator.pop(ctx);
+                },
+                child: const Text('Okay'))
+          ],
+        ),
+      );
       return;
     }
-    widget.onAddExpense(Expense(
-        name: _titleController.text,
-        amount: enteredAmount,
-        date: _selectedDate!,
-        category: _chooseCategory));
+    widget.onAddExpense(
+      Expense(
+          name: _titleController.text,
+          amount: enteredAmount,
+          date: _selectedDate!,
+          category: _chooseCategory),
+    );
     Navigator.pop(context);
   }
 
+  @override
   void dispose() {
     _titleController.dispose();
     _amountController.dispose();
@@ -68,42 +73,44 @@ class _NewExpenseState extends State<NewExpense> {
 
   @override
   Widget build(BuildContext context) {
-    print("_chooseCategory: $_chooseCategory");
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 48, 16, 0),
       child: Column(
         children: [
           TextField(
-              controller: _titleController,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                label: Text('Title'),
-              )),
+            controller: _titleController,
+            decoration: const InputDecoration(
+              border: OutlineInputBorder(),
+              label: Text('Title'),
+            ),
+          ),
           const SizedBox(height: 5),
           Row(
             children: [
               Expanded(
                 child: TextField(
-                    controller: _amountController,
-                    keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(
-                      prefixText: '\$ ',
-                      label: Text('Amount'),
-                    )),
+                  controller: _amountController,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    prefixText: '\$ ',
+                    label: Text('Amount'),
+                  ),
+                ),
               ),
               const SizedBox(width: 16),
               Expanded(
-                  child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text(_selectedDate == null
-                      ? 'No Date Selected'
-                      : formatter.format(_selectedDate!)),
-                  IconButton(
-                      onPressed: _presentDatePicker,
-                      icon: Icon(Icons.calendar_month))
-                ],
-              ))
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(_selectedDate == null
+                        ? 'No Date Selected'
+                        : formatter.format(_selectedDate!)),
+                    IconButton(
+                        onPressed: _presentDatePicker,
+                        icon: const Icon(Icons.calendar_month))
+                  ],
+                ),
+              ),
             ],
           ),
           Row(

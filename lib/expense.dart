@@ -5,6 +5,7 @@ import 'package:expense_tracker/widgets/new_expense.dart';
 
 class Expenses extends StatefulWidget {
   const Expenses({super.key});
+  @override
   State<Expenses> createState() {
     return _ExpensesState();
   }
@@ -42,9 +43,10 @@ class _ExpensesState extends State<Expenses> {
     setState(() {
       _userExpense.remove(expense);
     });
+    ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         backgroundColor: Theme.of(context).colorScheme.error,
-        duration: const Duration(seconds: 2),
+        duration: const Duration(seconds: 3),
         content: const Text('Expense deleted'),
         action: SnackBarAction(
             textColor: Theme.of(context).colorScheme.error,
@@ -68,22 +70,21 @@ class _ExpensesState extends State<Expenses> {
     }
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Flutter Expense Tracker',
           style: TextStyle(color: Colors.white),
         ),
         actions: [
           IconButton(
               onPressed: _openAddExpenseOverlay,
-              icon: Icon(Icons.add, size: 30, color: Colors.white))
+              icon: const Icon(Icons.add, size: 30, color: Colors.white))
         ],
         centerTitle: true,
-        backgroundColor: Colors.blueGrey.shade900,
-        elevation: 0,
+        backgroundColor: Color.fromARGB(255, 127, 85, 57),
       ),
       body: Column(
         children: [
-          Text('the chart'),
+          const Text('the chart'),
           Expanded(child: mainContent),
         ],
       ),
